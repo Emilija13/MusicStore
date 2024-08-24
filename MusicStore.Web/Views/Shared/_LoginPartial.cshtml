@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<MusicStore.Web.Models.Identity.MusicStoreUser> SignInManager
-@inject UserManager<MusicStore.Web.Models.Identity.MusicStoreUser> UserManager
+@inject SignInManager<MusicStore.Domain.Identity.MusicStoreUser> SignInManager
+@inject UserManager<MusicStore.Domain.Identity.MusicStoreUser> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

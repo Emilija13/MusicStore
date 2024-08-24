@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MusicStore.Web.Data;
-using MusicStore.Web.Models.Identity;
+using MusicStore.Repository;
+using MusicStore.Domain.Identity;
+using MusicStore.Repository.Implementation;
+using MusicStore.Repository.Interface;
+using MusicStore.Service.Interface;
+using MusicStore.Service.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +18,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<MusicStoreUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+
+builder.Services.AddTransient<IArtistService, ArtistService>();
+builder.Services.AddTransient<IAlbumService, AlbumService>();
 
 var app = builder.Build();
 
