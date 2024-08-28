@@ -36,7 +36,7 @@
                 {
                     <tr>
                         <td>@track.TrackName</td>
-                        <td>@track.Duration</td>
+                        <td>@track.Minutes:@track.Seconds</td>
                         <td>
                             <a class="btn btn-primary" href="@Url.Action("AddToPlaylist", new { trackId = track.Id })">Add to Playlist</a>
                         </td>

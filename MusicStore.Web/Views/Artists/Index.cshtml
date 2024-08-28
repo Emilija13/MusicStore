@@ -18,15 +18,14 @@
         <div class="col-md-3 mb-4">
 
             <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
-            <div class="card border-0 pt-4 hover-card">
-                    <div class="text-center">
-                        <img src="@item.ArtistImage" alt="Artist Image" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title text-light">@item.Name</h5>
-                    </div>
-            </div>
-
+                <div class="card border-0 pt-4 hover-card">
+                        <div class="text-center">
+                            <img src="@item.ArtistImage" alt="Artist Image" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-light">@item.Name</h5>
+                        </div>
+                </div>
             </a>
         </div>
     }

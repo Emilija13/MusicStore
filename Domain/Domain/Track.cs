@@ -7,7 +7,9 @@ namespace MusicStore.Domain.Domain
         [Required]
         public string TrackName { get; set; }
         [Required]
-        public int Duration { get; set; }
+        public int Minutes { get; set; }
+        [Required] 
+        public int Seconds { get; set; }
         [Required]
         public Guid AlbumId { get; set; }
         public virtual Album? Album { get; set; }

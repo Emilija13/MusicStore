@@ -24,7 +24,7 @@
             <tr>
                 <th>@Html.DisplayNameFor(model => model.TracksInPlaylist.First().Track.TrackName)</th>
                 <th>@Html.DisplayNameFor(model => model.TracksInPlaylist.First().Track.Album.Artist)</th>
-                <th>@Html.DisplayNameFor(model => model.TracksInPlaylist.First().Track.Duration)</th>
+                <th>Duration</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,7 +34,7 @@
                 <tr>
                     <td>@trackInPlaylist.Track.TrackName</td>
                     <td>@trackInPlaylist.Track.Album.Artist.Name</td>
-                    <td>@trackInPlaylist.Track.Duration</td>
+                    <td>@trackInPlaylist.Track.Minutes:@trackInPlaylist.Track.Seconds</td>
                     <td>
                         <form asp-action="RemoveTrackFromPlaylist" method="post">
                             <input type="hidden" name="TrackInPlaylistId" value="@trackInPlaylist.Id" />
