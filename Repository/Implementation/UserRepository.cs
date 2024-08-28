@@ -28,10 +28,9 @@ namespace MusicStore.Repository.Implementation
         public MusicStoreUser Get(string id)
         {
             return entities
-               //.Include(z => z.ShoppingCart)
-               //.Include("ShoppingCart.ProductInShoppingCarts")
-               //.Include("ShoppingCart.ProductInShoppingCarts.Product")
-               .SingleOrDefault(s => s.Id == id);
+                .Include(u => u.Playlists) 
+                .ThenInclude(p => p.TracksInPlaylist) 
+                .SingleOrDefault(s => s.Id == id);
         }
         public void Insert(MusicStoreUser entity)
         {

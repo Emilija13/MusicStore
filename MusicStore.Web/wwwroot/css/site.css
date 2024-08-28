@@ -17,6 +17,56 @@ html {
   min-height: 100%;
 }
 
+.btn {
+    background-color: #892fff;
+    border: none
+}
+
+.btn:hover {
+    background-color: #6404d4;
+}
+
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #141414;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
+.card {
+    background-color: #ff000000;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+.card:hover {
+    background-color: #1c1c1c
+}
+
+.navbar {
+    background-color: #1c1c1c;
+    height: 5rem;
+}
+
+.navbar .nav-link {
+    color: white;
+}
+
+.custom-nav-link:hover {
+    color: #6404d4;
+}
+
+.albums-ul {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.album-li {
+    border: none; /* Remove borders */
+    background-color: transparent; /* No background color by default */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.album-li:hover {
+    background-color: #1c1c1c; /* Change this to the color you want on hover */
 }

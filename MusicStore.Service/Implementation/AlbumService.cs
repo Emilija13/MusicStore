@@ -1,6 +1,7 @@
 ﻿using MusicStore.Domain.Domain;
 using MusicStore.Repository.Interface;
 using MusicStore.Service.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +14,18 @@ namespace MusicStore.Service.Implementation
     {
 
         private readonly IRepository<Album> _albumRepository;
+        private readonly IRepository<Artist> _artistRepository;
 
-        public AlbumService(IRepository<Album> albumRepository)
+        public AlbumService(IRepository<Album> albumRepository, IRepository<Artist> artistRepository)
         {
             _albumRepository = albumRepository;
+            _artistRepository = artistRepository;
         }
 
         public void CreateNewAlbum(Album a)
         {
+            var artist = _artistRepository.Get(a.ArtistId);
+            a.Artist = artist;
             _albumRepository.Insert(a);
         }
 

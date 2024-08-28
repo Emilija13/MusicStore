@@ -7,10 +7,11 @@
 
 <h1>Edit</h1>
 
-<h4>Album</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
+        <!-- Existing form for editing the album -->
+        <h4>Album</h4>
+        <hr />
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -44,6 +45,32 @@
             </div>
         </form>
     </div>
+
+    <div class="col-md-4">
+        <!-- Section for listing tracks -->
+        <h4>Tracks</h4>
+        <hr />
+        <a asp-action="AddTrack" asp-route-albumId="@Model.Id" class="btn btn-primary mb-2">Add Track</a>
+        <ul class="list-group">
+            @if (Model.Tracks != null && Model.Tracks.Any())
+            {
+                foreach (var track in Model.Tracks)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @track.TrackName
+                        <span>
+                            <a asp-action="EditTrack" asp-route-id="@track.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <a asp-action="DeleteTrack" asp-route-id="@track.Id" class="btn btn-sm btn-danger ml-2" onclick="return confirm('Are you sure you want to delete this track?');">Delete</a>
+                        </span>
+                    </li>
+                }
+            }
+            else
+            {
+                <li class="list-group-item">No tracks available</li>
+            }
+        </ul>
+    </div>
 </div>
 
 <div>
@@ -51,5 +78,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

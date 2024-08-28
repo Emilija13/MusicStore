@@ -24,6 +24,8 @@ builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 
 builder.Services.AddTransient<IArtistService, ArtistService>();
 builder.Services.AddTransient<IAlbumService, AlbumService>();
+builder.Services.AddTransient<ITrackService, TrackService>();
+builder.Services.AddTransient<IUserPlaylistService, UserPlaylistService>();
 
 var app = builder.Build();
 

@@ -10,11 +10,11 @@ namespace MusicStore.Domain.Domain
         public int Duration { get; set; }
         [Required]
         public Guid AlbumId { get; set; }
-        public virtual Album Album { get; set; }
+        public virtual Album? Album { get; set; }
         [Required]
         public double Rating { get; set; }
-
         public virtual Artist? Artist { get; set; }
+        public virtual ICollection<TrackInPlaylist>? TracksInPlaylist { get; set; }
 
     }
 }

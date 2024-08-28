@@ -1,0 +1,21 @@
+﻿@model IEnumerable<MusicStore.Domain.Domain.UserPlaylist>
+
+@{
+    ViewData["Title"] = "Select Playlist";
+}
+
+<form asp-action="AddTrackToPlaylist" method="post">
+    <input type="hidden" id="TrackId" name="TrackId" value="@ViewBag.TrackId" />
+    <div class="form-group">
+        <label>Select Playlist</label>
+        <select name="UserPlaylistId" class="form-control">
+            @foreach (var playlist in Model)
+            {
+                <option value="@playlist.Id">@playlist.PlaylistName</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Add to Playlist" class="btn btn-primary" />
+    </div>
+</form>

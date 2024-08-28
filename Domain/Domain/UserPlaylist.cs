@@ -8,12 +8,10 @@ namespace MusicStore.Domain.Domain
         [Required]
         public string PlaylistName { get; set; }
         [Required]
-        public int Duration { get; set; }
-        [Required]
         public string Image { get; set; }
         [Required]
         public string UserId { get; set; }
-        public virtual MusicStoreUser User { get; set; }
-        public virtual ICollection<Track>? Tracks { get; set; }
+        public MusicStoreUser? User { get; set; }
+        public virtual ICollection<TrackInPlaylist>? TracksInPlaylist { get; set; }
     }
 }

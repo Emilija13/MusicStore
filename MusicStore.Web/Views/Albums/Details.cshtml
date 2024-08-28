@@ -7,42 +7,53 @@
 
 <h1>Details</h1>
 
-<div>
-    <h4>Album</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AlbumName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AlbumName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReleaseDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReleaseDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AlbumImage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AlbumImage)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rating)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rating)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Artist)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Artist.ArtistImage)
-        </dd>
-    </dl>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <img src="@Model.AlbumImage" alt="Playlist Image" class="fixed-size-img" />
+    </div>
+    <div class="col-md-9 d-flex align-items-end">
+        <h1 class="display-4">@Model.AlbumName</h1>
+    </div>
 </div>
+
+<!-- Tracks -->
+<div>
+    <h4>Tracks</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Track Name</th>
+                <th>Duration</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Tracks != null && Model.Tracks.Any())
+            {
+                @foreach (var track in Model.Tracks)
+                {
+                    <tr>
+                        <td>@track.TrackName</td>
+                        <td>@track.Duration</td>
+                        <td>
+                            <a class="btn btn-primary" href="@Url.Action("AddToPlaylist", new { trackId = track.Id })">Add to Playlist</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No tracks available</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Links for Edit and Back to List -->
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

@@ -1,42 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Domain.Domain;
 using MusicStore.Repository;
+using MusicStore.Service.Implementation;
+using MusicStore.Service.Interface;
 
 namespace MusicStore.Web.Controllers
 {
     public class UserPlaylistsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUserPlaylistService _userPlaylistService;
 
-        public UserPlaylistsController(ApplicationDbContext context)
+        public UserPlaylistsController(IUserPlaylistService userPlaylistService)
         {
-            _context = context;
+            _userPlaylistService = userPlaylistService;
         }
 
         // GET: UserPlaylists
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.UserPlaylists.Include(u => u.User);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return View(_userPlaylistService.GetAllPlaylists(userId));
         }
 
         // GET: UserPlaylists/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public IActionResult Details(Guid? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var userPlaylist = await _context.UserPlaylists
-                .Include(u => u.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var userPlaylist = _userPlaylistService.GetDetailsForPlaylist(userId, id);
             if (userPlaylist == null)
             {
                 return NotFound();
@@ -48,7 +51,8 @@ namespace MusicStore.Web.Controllers
         // GET: UserPlaylists/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.CurrentUserId = userId;
             return View();
         }
 
@@ -57,33 +61,36 @@ namespace MusicStore.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlaylistName,Duration,Image,UserId,Id")] UserPlaylist userPlaylist)
+        public IActionResult Create([Bind("PlaylistName,Image,UserId,Id")] UserPlaylist userPlaylist)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (ModelState.IsValid)
             {
                 userPlaylist.Id = Guid.NewGuid();
-                _context.Add(userPlaylist);
-                await _context.SaveChangesAsync();
+                _userPlaylistService.CreateNewPlaylist(userId, userPlaylist);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userPlaylist.UserId);
+            ViewBag.CurrentUserId = userId;
             return View(userPlaylist);
         }
 
         // GET: UserPlaylists/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public IActionResult Edit(Guid? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var userPlaylist = await _context.UserPlaylists.FindAsync(id);
+            var userPlaylist = _userPlaylistService.GetDetailsForPlaylist(userId, id);
             if (userPlaylist == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userPlaylist.UserId);
+            ViewBag.CurrentUserId = userId;
             return View(userPlaylist);
         }
 
@@ -92,8 +99,10 @@ namespace MusicStore.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("PlaylistName,Duration,Image,UserId,Id")] UserPlaylist userPlaylist)
+        public IActionResult Edit(Guid id, [Bind("PlaylistName,Image,UserId,Id")] UserPlaylist userPlaylist)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (id != userPlaylist.Id)
             {
                 return NotFound();
@@ -103,37 +112,29 @@ namespace MusicStore.Web.Controllers
             {
                 try
                 {
-                    _context.Update(userPlaylist);
-                    await _context.SaveChangesAsync();
+                    _userPlaylistService.UpdateExistingPlaylist(userPlaylist);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserPlaylistExists(userPlaylist.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userPlaylist.UserId);
+            ViewBag.CurrentUserId = userId;
             return View(userPlaylist);
         }
 
         // GET: UserPlaylists/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public IActionResult Delete(Guid? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var userPlaylist = await _context.UserPlaylists
-                .Include(u => u.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var userPlaylist = _userPlaylistService.GetDetailsForPlaylist(userId, id);
             if (userPlaylist == null)
             {
                 return NotFound();
@@ -145,21 +146,28 @@ namespace MusicStore.Web.Controllers
         // POST: UserPlaylists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            var userPlaylist = await _context.UserPlaylists.FindAsync(id);
-            if (userPlaylist != null)
-            {
-                _context.UserPlaylists.Remove(userPlaylist);
-            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            await _context.SaveChangesAsync();
+            _userPlaylistService.DeletePlaylist(id);
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public IActionResult RemoveTrackFromPlaylist(Guid TrackInPlaylistId, Guid PlaylistId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _userPlaylistService.RemoveTrackFromPlaylist(userId, TrackInPlaylistId, PlaylistId);
+
+            return RedirectToAction("Details", new { id = PlaylistId });
+        }
+
+
         private bool UserPlaylistExists(Guid id)
         {
-            return _context.UserPlaylists.Any(e => e.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return _userPlaylistService.GetAllPlaylists(userId).Any(e => e.Id == id);
         }
     }
 }
