@@ -167,3 +167,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .album-col:hover .delete-btn {
     opacity: 1;
 }
+
+.show-icon{
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+tr:hover .show-icon{
+    opacity: 1;
+}
+
+.show-icon:hover {
+    transform: scale(1.1);
+}
+
+.show-icon:hover svg {
+    fill: #892fff;
+}
