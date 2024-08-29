@@ -16,16 +16,24 @@ namespace MusicStore.Web.Controllers
     public class UserPlaylistsController : Controller
     {
         private readonly IUserPlaylistService _userPlaylistService;
+        private readonly ITrackService _trackService;
 
-        public UserPlaylistsController(IUserPlaylistService userPlaylistService)
+        public UserPlaylistsController(IUserPlaylistService userPlaylistService, ITrackService trackService)
         {
             _userPlaylistService = userPlaylistService;
+            _trackService = trackService;
         }
 
         // GET: UserPlaylists
         public IActionResult Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account", "Identity");
+            }
+
             return View(_userPlaylistService.GetAllPlaylists(userId));
         }
 
@@ -44,6 +52,20 @@ namespace MusicStore.Web.Controllers
             {
                 return NotFound();
             }
+
+            var totalDuration = _trackService.CalculateTotalDuration(id.Value);
+
+            string formattedDuration;
+            if (totalDuration[0] > 0)
+            {
+                formattedDuration = $"{totalDuration[0]} hr {totalDuration[1]} min";
+            }
+            else
+            {
+                formattedDuration = $"{totalDuration[1]} min {totalDuration[2]} sec";
+            }
+
+            ViewBag.TotalDuration = formattedDuration;
 
             return View(userPlaylist);
         }
@@ -118,7 +140,7 @@ namespace MusicStore.Web.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { id = userPlaylist.Id });
             }
             ViewBag.CurrentUserId = userId;
             return View(userPlaylist);

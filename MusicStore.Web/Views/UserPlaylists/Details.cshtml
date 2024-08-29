@@ -5,37 +5,66 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row mb-4">
-    <div class="col-md-3">
-        <!-- Display the playlist image -->
-        <img src="@Model.Image" alt="Playlist Image" class="fixed-size-img" />
+<div class="my-4 d-flex justify-content-between">
+    <div>
+        <a asp-action="Index">Back to My Playlists</a>
     </div>
-    <div class="col-md-9 d-flex align-items-end">
-        <!-- Display the playlist name -->
-        <h1 class="display-4">@Model.PlaylistName</h1>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
     </div>
 </div>
 
-<div>
+
+<div class="d-flex align-items-end">
+    <div class="mr-3">
+        <img src="@Model.Image" alt="Playlist Image" class="fixed-size-img" />
+    </div>
+    <div>
+        <h1 class="display-4">@Model.PlaylistName</h1>
+        <div class="d-flex">
+            <div class="ml-2">
+                @Model.TracksInPlaylist.Count songs, @ViewBag.TotalDuration
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
     <h4>Tracks in Playlist</h4>
-    <hr />
     <table class="table">
         <thead>
             <tr>
-                <th>@Html.DisplayNameFor(model => model.TracksInPlaylist.First().Track.TrackName)</th>
-                <th>@Html.DisplayNameFor(model => model.TracksInPlaylist.First().Track.Album.Artist)</th>
+                <th>Track</th>
+            @*     <th>@Html.DisplayNameFor(model => model.TracksInPlaylist.First().Track.Album.Artist)</th> *@
                 <th>Duration</th>
-                <th>Actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var trackInPlaylist in Model.TracksInPlaylist)
             {
                 <tr>
-                    <td>@trackInPlaylist.Track.TrackName</td>
-                    <td>@trackInPlaylist.Track.Album.Artist.Name</td>
-                    <td>@trackInPlaylist.Track.Minutes:@trackInPlaylist.Track.Seconds</td>
                     <td>
+                        <div class="d-flex">
+                            <div class="mr-2">
+                                <img src="@trackInPlaylist.Track.Album.AlbumImage" class="album-cover-playlist" alt="Album Cover" />
+                            </div>
+                            <div>
+                                <div>
+                                    @trackInPlaylist.Track.TrackName
+                                </div>
+                                <div>
+                                    <a asp-action="Details" asp-controller="Artists" asp-route-id="@trackInPlaylist.Track.Album.Artist.Id">
+                                        @trackInPlaylist.Track.Album.Artist.Name
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    @* <td>@trackInPlaylist.Track.Album.Artist.Name</td> *@
+                    <td >@trackInPlaylist.Track.Minutes:@trackInPlaylist.Track.Seconds</td>
+                    <td class="d-flex justify-content-end">
                         <form asp-action="RemoveTrackFromPlaylist" method="post">
                             <input type="hidden" name="TrackInPlaylistId" value="@trackInPlaylist.Id" />
                             <input type="hidden" name="PlaylistId" value="@trackInPlaylist.UserPlaylistId" />
@@ -48,7 +77,4 @@
     </table>
 </div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

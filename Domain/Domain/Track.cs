@@ -7,8 +7,10 @@ namespace MusicStore.Domain.Domain
         [Required]
         public string TrackName { get; set; }
         [Required]
+        [Range(0, 59, ErrorMessage = "Minutes must be between 0 and 59.")]
         public int Minutes { get; set; }
-        [Required] 
+        [Required]
+        [Range(0, 59, ErrorMessage = "Seconds must be between 0 and 59.")]
         public int Seconds { get; set; }
         [Required]
         public Guid AlbumId { get; set; }

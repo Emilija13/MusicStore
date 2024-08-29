@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'circular-std-2';
+    src: url('/fonts/circular-std-2.ttf') format('truetype');
+    font-weight: lighter;
+    font-style: initial;
+}
+
+
 html {
   font-size: 14px;
 }
@@ -17,12 +25,12 @@ html {
   min-height: 100%;
 }
 
-.btn {
+.btn-primary {
     background-color: #892fff;
-    border: none
+    border: none;
 }
 
-.btn:hover {
+.btn-primary:hover {
     background-color: #6404d4;
 }
 
@@ -30,7 +38,12 @@ body {
     margin-bottom: 60px;
     background-color: #141414;
     color: white;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'circular-std-2', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+}
+
+footer {
+    background-color: #1c1c1c;
 }
 
 .card {
@@ -48,11 +61,12 @@ body {
     height: 5rem;
 }
 
-.navbar .nav-link {
+
+a {
     color: white;
 }
 
-.custom-nav-link:hover {
+a:hover {
     color: #6404d4;
 }
 
@@ -62,11 +76,94 @@ body {
 }
 
 .album-li {
-    border: none; /* Remove borders */
-    background-color: transparent; /* No background color by default */
-    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    border: none;
+    background-color: transparent;
+    transition: background-color 0.3s ease; 
+    border-radius: 5px;
 }
 
 .album-li:hover {
-    background-color: #1c1c1c; /* Change this to the color you want on hover */
+    background-color: #1c1c1c;
+    border-radius: 5px;
+}
+
+.album-cover-li {
+    width: 10rem;
+    height: 10rem;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+table tr {
+    border: none;
+    background-color: transparent;
+    color: white;
+}
+
+.table tr td {
+    border: none;
+    color: white;
+}
+
+table tr:hover {
+    background-color: #1c1c1c; 
+    cursor: pointer;
+}
+
+.table th {
+    border: none;
+    background-color: #1c1c1c;
+    color: white;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 0.2px solid gray
+}
+
+.form-control, .form-control:focus {
+    background-color: #141414;
+    color: white;
+}
+
+.fixed-size-img {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 5px;
+}
+
+.list-group-item {
+    background: none;
+    border: 1px solid;
+}
+
+.album-cover-playlist {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.title{
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.album-col {
+    position: relative;
+    overflow: hidden;
+}
+
+.delete-btn {
+    right: 10px;
+    bottom: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.album-col:hover .delete-btn {
+    opacity: 1;
 }

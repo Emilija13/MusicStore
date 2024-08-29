@@ -103,7 +103,7 @@ namespace MusicStore.Web.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { id = artist.Id });
             }
             return View(artist);
         }

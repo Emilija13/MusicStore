@@ -14,5 +14,6 @@ namespace MusicStore.Service.Interface
         void CreateNewTrack(Track t);
         void UpdateExistingTrack(Track t);
         void DeleteTrack(Guid id);
+        List<int> CalculateTotalDuration(Guid id);
     }
 }

@@ -5,42 +5,57 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="my-4 d-flex justify-content-between">
+    <div>
+        <a asp-action="Index">Back to Artists</a>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
+    </div>
+</div>
+
+
 <div class="container">
     <!-- Artist Information -->
-    <div class="row mb-4">
-        <div class="col-md-3">
+    <div class="d-flex align-items-end p-lg-4 ml-4">
+        <div class="mr-1">
             <img src="@Model.ArtistImage" alt="Artist Image" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
         </div>
-        <div class="col-md-9 d-flex align-items-end">
+        <div>
             <h2>@Model.Name</h2>
         </div>
     </div>
 
 
+
+
+
     <!-- Albums of the Artist -->
-    <h4>Albums</h4>
-    <hr />
+    <div class="d-flex align-items-center" style="margin-top: 3rem">
+        <h4 class="mx-4">Discography</h4>
+
+        <a asp-action="Create" asp-controller="Albums" class="btn btn-primary my-3" style="margin-top 4rem;">
+            Add Album
+        </a>
+    </div>
+
     @if (Model.Albums != null && Model.Albums.Any())
     {
-        <ul class="list-group border-0 albums-ul">
+        <div class="row albums-row">
             @foreach (var album in Model.Albums)
             {
-                <li class="list-group-item album-li">
-                    <a asp-action="Details" asp-controller="Albums" asp-route-id="@album.Id" class="text-decoration-none d-flex align-items-center">
-                        <img src="@album.AlbumImage" alt="Album Image" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover; margin-right: 15px;" />
-                        <span>@album.AlbumName</span>
+                <div class="col-md-2 album-col album-li p-3 mx-2">
+                    <a asp-action="Details" asp-controller="Albums" asp-route-id="@album.Id" class="text-decoration-none d-block">
+                        <img src="@album.AlbumImage" class="album-cover-li img-fluid" alt="Album Image" />
+                        <div class="album-name mt-2 text-light"><b>@album.AlbumName</b></div>
                     </a>
-                </li>
+                </div>
             }
-        </ul>
+        </div>
     }
     else
     {
         <p>No albums found for this artist.</p>
     }
-</div>
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

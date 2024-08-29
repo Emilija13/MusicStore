@@ -5,24 +5,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Explore Albums</h1>
-
-<p>
+<div class="d-flex justify-content-between align-items-end my-4">
+    <h2>Explore Albums</h2>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+</div>
 
-<div class="row">
-    @foreach (var item in Model)
+<div class="row albums-row">
+    @foreach (var album in Model)
     {
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
-                    <img src="@item.AlbumImage" class="card-img-top fixed-size-img" alt="Album Image" style="width: 100%; height: 200px; object-fit: cover;" />
-                    <div class="card-body text-center">
-                        <h5 class="card-title">@item.AlbumName</h5>
-                    </div>
-                </a>
-            </div>
+        <div class="col-md-2 album-col album-li p-3 mx-2">
+            <a asp-action="Details" asp-route-id="@album.Id" class="text-decoration-none d-block">
+                <img src="@album.AlbumImage" class="album-cover-li img-fluid" alt="Album Image" />
+                <div class="album-name mt-2 text-light"><b>@album.AlbumName</b></div>
+            </a>
         </div>
     }
 </div>

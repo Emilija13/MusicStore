@@ -49,6 +49,20 @@ namespace MusicStore.Web.Controllers
                 return NotFound();
             }
 
+            var totalDuration = _trackService.CalculateTotalDuration(id.Value);
+
+            string formattedDuration;
+            if (totalDuration[0] > 0)
+            {
+                formattedDuration = $"{totalDuration[0]} hr {totalDuration[1]} min";
+            }
+            else
+            {
+                formattedDuration = $"{totalDuration[1]} min {totalDuration[2]} sec";
+            }
+
+            ViewBag.TotalDuration = formattedDuration;
+
             return View(album);
         }
 
@@ -128,7 +142,7 @@ namespace MusicStore.Web.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { id = album.Id });
             }
             var artists = _artistService.GetAllArtists();
             ViewBag.ArtistId = new SelectList(artists, "Id", "Name");

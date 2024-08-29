@@ -5,22 +5,39 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="my-4 d-flex justify-content-between">
+    <div>
+        <a asp-action="Index">Back to Albums</a>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
+    </div>
+</div>
 
-
-<div class="row mb-4">
-    <div class="col-md-3">
+<div class="d-flex align-items-end">
+    <div class="mr-3">
         <img src="@Model.AlbumImage" alt="Playlist Image" class="fixed-size-img" />
     </div>
-    <div class="col-md-9 d-flex align-items-end">
+    <div>
         <h1 class="display-4">@Model.AlbumName</h1>
+        <div class="d-flex">
+            <div class="mr-2">
+                <a asp-controller="Artists" asp-action="Details" asp-route-id="@Model.Artist.Id">
+                    @Model.Artist.Name
+                </a>
+            </div>
+            <span>&#8226; </span>
+            <div class="ml-2">
+                @Model.Tracks.Count songs, @ViewBag.TotalDuration
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Tracks -->
 <div>
-    <h4>Tracks</h4>
-    <hr />
+    <h4 class="mt-4">Tracks</h4>
     <table class="table">
         <thead>
             <tr>
@@ -34,10 +51,10 @@
             {
                 @foreach (var track in Model.Tracks)
                 {
-                    <tr>
+                    <tr class="p-2">
                         <td>@track.TrackName</td>
                         <td>@track.Minutes:@track.Seconds</td>
-                        <td>
+                        <td class="d-flex justify-content-end">
                             <a class="btn btn-primary" href="@Url.Action("AddToPlaylist", new { trackId = track.Id })">Add to Playlist</a>
                         </td>
                     </tr>
@@ -51,10 +68,11 @@
             }
         </tbody>
     </table>
+    <div class="text-muted">
+        <div>Released: </div>
+        @Model.ReleaseDate.Date 
+    </div>
 </div>
 
 <!-- Links for Edit and Back to List -->
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
