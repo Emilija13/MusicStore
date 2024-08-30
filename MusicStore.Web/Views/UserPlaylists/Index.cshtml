@@ -10,6 +10,10 @@
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </div>
 
+<div class="row my-4">
+    <a asp-controller="UserPlaylists" asp-action="ExportAllOrders" class="btn btn-info">Export playlists</a>
+</div>
+
 <div class="row albums-row">
     @foreach (var playlist in Model)
     {
