@@ -180,7 +180,3 @@ tr:hover .show-icon{
 .show-icon:hover {
     transform: scale(1.1);
 }
-
-.show-icon:hover svg {
-    fill: #892fff;
-}
