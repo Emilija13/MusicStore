@@ -10,6 +10,7 @@ namespace MusicStore.Service.Interface
     public interface IUserPlaylistService
     {
         List<UserPlaylist> GetAllPlaylists(string userId);
+        List<UserPlaylist> GetAllPlaylistsForExport();
         UserPlaylist GetDetailsForPlaylist(string userId, Guid? id);
         void CreateNewPlaylist(string userId, UserPlaylist p);
         void UpdateExistingPlaylist(UserPlaylist p);

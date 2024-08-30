@@ -29,9 +29,16 @@ html {
     background-color: #892fff;
     border: none;
 }
+.btn-info {
+    background-color: #1c1c1c;
+    border: none;
+}
 
 .btn-primary:hover {
     background-color: #6404d4;
+}
+.btn-info:hover {
+    background-color: #1c1c1c;
 }
 
 body {

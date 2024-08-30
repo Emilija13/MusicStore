@@ -14,10 +14,13 @@ namespace MusicStore.Service.Implementation
         private readonly IRepository<UserPlaylist> _userPlaylistRepository;
         private readonly IUserRepository _userRepository;
         private readonly IRepository<Track> _trackRepository;
+        private readonly IUserPlaylistRepository _userPlRepository;
 
-        public UserPlaylistService(IRepository<UserPlaylist> userPlaylistRepository, IUserRepository userRepository, IRepository<Track> trackRepository) 
+
+        public UserPlaylistService(IRepository<UserPlaylist> userPlaylistRepository, IUserRepository userRepository, IRepository<Track> trackRepository,IUserPlaylistRepository userPlRepository) 
         { 
             _userPlaylistRepository = userPlaylistRepository;
+            _userPlRepository = userPlRepository;
             _userRepository = userRepository;
             _trackRepository = trackRepository;
         }
@@ -73,7 +76,10 @@ namespace MusicStore.Service.Implementation
             var loggedInUser = _userRepository.Get(userId);
             return loggedInUser?.Playlists?.ToList();
         }
-
+        public List<UserPlaylist> GetAllPlaylistsForExport()
+        {
+            return _userPlRepository.GetAllUserPlaylists();
+        }
         public UserPlaylist GetDetailsForPlaylist(string userId, Guid? id)
         {
             //var loggedInUser = _userRepository.Get(userId);

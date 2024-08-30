@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using GemBox.Document;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +14,7 @@ using MusicStore.Domain.Domain;
 using MusicStore.Repository;
 using MusicStore.Service.Implementation;
 using MusicStore.Service.Interface;
+
 
 namespace MusicStore.Web.Controllers
 {
@@ -191,5 +196,56 @@ namespace MusicStore.Web.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return _userPlaylistService.GetAllPlaylists(userId).Any(e => e.Id == id);
         }
-    }
+
+        [HttpGet]
+        public FileContentResult ExportAllOrders()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            string fileName = "MyPlaylists.xlsx";
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+            using (var workbook = new XLWorkbook())
+            {
+                IXLWorksheet worksheet = workbook.Worksheets.Add("MyPlaylists");
+                worksheet.Cell(1, 1).Value = "Playlist name";
+                worksheet.Cell(1, 2).Value = "Total duration";
+
+                var data = _userPlaylistService.GetAllPlaylistsForExport().FindAll(z => z.User.Id == userId);
+
+                for (int i = 0; i < data.Count(); i++)
+                {
+                    var item = data[i];
+                    var totalDuration =  _trackService.CalculateTotalDuration(item.Id);
+                    string formattedDuration;
+                    if (totalDuration[0] > 0)
+                    {
+                        formattedDuration = $"{totalDuration[0]} hr {totalDuration[1]} min";
+                    }
+                    else
+                    {
+                        formattedDuration = $"{totalDuration[1]} min {totalDuration[2]} sec";
+                    }
+
+                    worksheet.Cell(i + 2, 1).Value = item.PlaylistName;
+                    worksheet.Cell(i + 2, 2).Value = formattedDuration;
+                    var total = 0;
+                    for (int j = 0; j < item.TracksInPlaylist.Count(); j++)
+                    {
+                        worksheet.Cell(1, 3 + j).Value = "Song - " + (j + 1);
+                        worksheet.Cell(i + 2, 3 + j).Value = item.TracksInPlaylist.ElementAt(j).Track.TrackName;
+                    }
+                   
+
+                }
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return File(content, contentType, fileName);
+                }
+            }
+        }
+
+        }
 }
