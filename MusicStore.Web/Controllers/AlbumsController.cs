@@ -32,6 +32,10 @@ namespace MusicStore.Web.Controllers
         // GET: Albums
         public IActionResult Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
             return View(_albumService.GetAllAlbums());
         }
 

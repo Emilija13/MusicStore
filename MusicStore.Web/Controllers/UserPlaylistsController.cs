@@ -34,6 +34,8 @@ namespace MusicStore.Web.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
             return View(_userPlaylistService.GetAllPlaylists(userId));
         }
 

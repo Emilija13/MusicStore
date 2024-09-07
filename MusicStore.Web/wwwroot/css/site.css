@@ -48,6 +48,9 @@ body {
     font-family: 'circular-std-2', sans-serif;
     /*font-family: 'Roboto', sans-serif;*/
 }
+.text-invisible {
+  color: #141414;
+}
 
 footer {
     background-color: #1c1c1c;
