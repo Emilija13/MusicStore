@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MusicStore.Domain;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace MusicStore.Web.Controllers
 {
@@ -15,6 +16,10 @@ namespace MusicStore.Web.Controllers
 
         public IActionResult Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
             return View();
         }
 

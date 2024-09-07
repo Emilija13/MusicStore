@@ -34,11 +34,6 @@ namespace MusicStore.Web.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Account", "Identity");
-            }
-
             return View(_userPlaylistService.GetAllPlaylists(userId));
         }
 
