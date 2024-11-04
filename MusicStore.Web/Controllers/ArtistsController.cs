@@ -34,6 +34,11 @@ namespace MusicStore.Web.Controllers
         // GET: Artists/Details/5
         public IActionResult Details(Guid? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             if (id == null)
             {
                 return NotFound();
@@ -51,6 +56,11 @@ namespace MusicStore.Web.Controllers
         // GET: Artists/Create
         public IActionResult Create()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             return View();
         }
 
@@ -73,6 +83,11 @@ namespace MusicStore.Web.Controllers
         // GET: Artists/Edit/5
         public IActionResult Edit(Guid? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             if (id == null)
             {
                 return NotFound();
@@ -116,6 +131,11 @@ namespace MusicStore.Web.Controllers
         // GET: Artists/Delete/5
         public IActionResult Delete(Guid? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             if (id == null)
             {
                 return NotFound();

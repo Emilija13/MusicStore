@@ -42,6 +42,12 @@ namespace MusicStore.Web.Controllers
         // GET: Albums/Details/5
         public IActionResult Details(Guid? id)
         {
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             if (id == null)
             {
                 return NotFound();
@@ -73,6 +79,11 @@ namespace MusicStore.Web.Controllers
         // GET: Albums/Create
         public IActionResult Create()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             var artists = _artistService.GetAllArtists();
 
             ViewBag.ArtistId = new SelectList(artists, "Id", "Name");
@@ -109,6 +120,11 @@ namespace MusicStore.Web.Controllers
         // GET: Albums/Edit/5
         public IActionResult Edit(Guid? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             if (id == null)
             {
                 return NotFound();
@@ -131,6 +147,7 @@ namespace MusicStore.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("AlbumName,ReleaseDate,AlbumImage,Rating,ArtistId,Id")] Album album)
         {
+
             if (id != album.Id)
             {
                 return NotFound();
@@ -156,6 +173,11 @@ namespace MusicStore.Web.Controllers
         // GET: Albums/Delete/5
         public IActionResult Delete(Guid? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             if (id == null)
             {
                 return NotFound();
@@ -182,6 +204,11 @@ namespace MusicStore.Web.Controllers
         [HttpGet]
         public IActionResult AddTrack(Guid albumId)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             var album = _albumService.GetDetailsForAlbum(albumId); // Retrieve album to associate with the track
             if (album == null)
             {
@@ -210,6 +237,11 @@ namespace MusicStore.Web.Controllers
 
         public IActionResult EditTrack(Guid id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             var track = _trackService.GetDetailsForTrack(id);
             if (track == null)
             {
@@ -233,6 +265,11 @@ namespace MusicStore.Web.Controllers
 
         public IActionResult DeleteTrack(Guid id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             var albumId = _trackService.GetDetailsForTrack(id).AlbumId;
             _trackService.DeleteTrack(id);
             return RedirectToAction("Edit", new { id = albumId });
@@ -242,6 +279,10 @@ namespace MusicStore.Web.Controllers
         public IActionResult AddToPlaylist(Guid trackId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure that ViewBag.LoggedIn is always a boolean
+            ViewBag.LoggedIn = userId != null;
+
             var playlists = _userPlaylistService.GetAllPlaylists(userId);
             ViewBag.TrackId = trackId;
             return View("AddToPlaylist", playlists);
