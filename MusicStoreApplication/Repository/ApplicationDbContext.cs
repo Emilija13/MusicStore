@@ -16,6 +16,8 @@ namespace MusicStore.Repository
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<Track> Tracks { get; set; }
         public virtual DbSet<UserPlaylist> UserPlaylists { get; set; }
+        public virtual DbSet<AlbumsInCart> AlbumsInCarts { get; set; }
+        public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
     }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MusicStore.Domain.Domain;
 using MusicStore.Domain.Identity;
 using MusicStore.Repository.Interface;
 using System;
@@ -29,7 +30,9 @@ namespace MusicStore.Repository.Implementation
         {
             return entities
                 .Include(u => u.Playlists) 
-                .ThenInclude(p => p.TracksInPlaylist) 
+                .ThenInclude(p => p.TracksInPlaylist)
+                .Include("ShoppingCart.AlbumsInCart")
+                .Include("ShoppingCart.AlbumsInCart.Album")
                 .SingleOrDefault(s => s.Id == id);
         }
         public void Insert(MusicStoreUser entity)

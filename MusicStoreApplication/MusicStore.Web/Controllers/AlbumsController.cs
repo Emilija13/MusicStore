@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using MusicStore.Domain.Domain;
 using MusicStore.Repository;
 using MusicStore.Service.Implementation;
 using MusicStore.Service.Interface;
+using MusicStore.Domain.DTO;
 
 namespace MusicStore.Web.Controllers
 {
@@ -19,14 +21,15 @@ namespace MusicStore.Web.Controllers
         private readonly IArtistService _artistService;
         private readonly ITrackService _trackService;
         private readonly IUserPlaylistService _userPlaylistService;
-       
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public AlbumsController(IArtistService artistService, IAlbumService albumService, ITrackService trackService, IUserPlaylistService userPlaylistService)
+        public AlbumsController(IArtistService artistService, IAlbumService albumService, ITrackService trackService, IUserPlaylistService userPlaylistService, IShoppingCartService shoppingCartService)
         {
             _artistService = artistService;
             _albumService = albumService;
             _trackService = trackService;
             _userPlaylistService = userPlaylistService;
+            _shoppingCartService = shoppingCartService;
         }
 
         // GET: Albums
@@ -99,7 +102,7 @@ namespace MusicStore.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("AlbumName,ReleaseDate,AlbumImage,Rating,ArtistId,Id")] Album album)
+        public IActionResult Create([Bind("AlbumName,ReleaseDate,AlbumImage,Rating,Price,ArtistId,Id")] Album album)
         {
             foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
             {
@@ -116,6 +119,43 @@ namespace MusicStore.Web.Controllers
             ViewBag.ArtistId = new SelectList(artists, "Id", "Name");
             return View(album);
         }
+        public IActionResult AddToCart(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            ViewBag.LoggedIn = userId != null;
+
+            var album = _albumService.GetDetailsForAlbum(id);
+            AlbumsInCart model = new AlbumsInCart();
+            
+            if (album != null)
+
+            {
+                model.AlbumId = album.Id;
+                model.Album = album;
+                model.Quantity = 1;
+            }
+            ViewBag.AlbumId = album.Id;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult AddToCartConfirmed(AlbumsInCart model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            ViewBag.LoggedIn = userId != null;
+
+            _shoppingCartService.AddToShoppingConfirmed(model, userId);
+
+            return View("Index", _albumService.GetAllAlbums());
+        }
+
 
         // GET: Albums/Edit/5
         public IActionResult Edit(Guid? id)
@@ -145,7 +185,7 @@ namespace MusicStore.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, [Bind("AlbumName,ReleaseDate,AlbumImage,Rating,ArtistId,Id")] Album album)
+        public IActionResult Edit(Guid id, [Bind("AlbumName,ReleaseDate,AlbumImage,Rating,Price,ArtistId,Id")] Album album)
         {
 
             if (id != album.Id)
@@ -293,6 +333,8 @@ namespace MusicStore.Web.Controllers
         public IActionResult AddTrackToPlaylist([Bind("TrackId,UserPlaylistId,Id")] TrackInPlaylist model)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.LoggedIn = userId != null;
+
             var track = _trackService.GetDetailsForTrack(model.TrackId);
             var result = _userPlaylistService.addTrackToPlaylist(userId, model);
             if (result)

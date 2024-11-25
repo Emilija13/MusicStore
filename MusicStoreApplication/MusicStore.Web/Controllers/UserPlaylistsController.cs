@@ -52,6 +52,8 @@ namespace MusicStore.Web.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            ViewBag.LoggedIn = userId != null;
+
             if (id == null)
             {
                 return NotFound();

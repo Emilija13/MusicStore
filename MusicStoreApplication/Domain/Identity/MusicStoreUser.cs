@@ -9,6 +9,7 @@ namespace MusicStore.Domain.Identity
         public string? LastName { get; set; }
         public string? Address { get; set; }
         public virtual List<UserPlaylist>? Playlists { get; set; }
+        public virtual ShoppingCart ShoppingCart { get; set; }
 
     }
 }
