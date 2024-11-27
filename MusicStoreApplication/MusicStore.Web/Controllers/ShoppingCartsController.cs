@@ -71,6 +71,7 @@ namespace MusicStore.Web.Controllers
 
             ViewBag.LoggedIn = userId != null;
 
+
             var order = this._shoppingCartService.getShoppingCartInfo(userId);
 
             var customer = customerService.Create(new CustomerCreateOptions

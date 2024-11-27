@@ -6,6 +6,7 @@ using MusicStore.Repository.Implementation;
 using MusicStore.Repository.Interface;
 using MusicStore.Service.Interface;
 using MusicStore.Service.Implementation;
+using MusicStore.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,8 @@ builder.Services.AddTransient<IArtistService, ArtistService>();
 builder.Services.AddTransient<IAlbumService, AlbumService>();
 builder.Services.AddTransient<ITrackService, TrackService>();
 builder.Services.AddTransient<IUserPlaylistService, UserPlaylistService>();
+builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 var app = builder.Build();
 

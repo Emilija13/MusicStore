@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using MusicStore.Domain.Domain;
 using MusicStore.Domain.Identity;
 
 namespace MusicStore.Web.Areas.Identity.Pages.Account
@@ -130,6 +131,7 @@ namespace MusicStore.Web.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.Address = Input.Address;
+                user.ShoppingCart = new ShoppingCart();
 
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
