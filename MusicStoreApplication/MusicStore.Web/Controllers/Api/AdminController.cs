@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MusicStore.Domain.Identity;
 using MusicStore.Domain.DTO;
+using MusicStore.Service.Interface;
+using MusicStore.Domain.Domain;
 
 namespace MusicStore.Web.Controllers.Api
 {
@@ -11,9 +13,15 @@ namespace MusicStore.Web.Controllers.Api
     public class AdminController : ControllerBase
     {
         private readonly UserManager<MusicStoreUser> _userManager;
-        public AdminController(UserManager<MusicStoreUser> userManager)
+
+        private readonly IAlbumService _albumService;
+        private readonly IArtistService _artistService;
+
+        public AdminController(UserManager<MusicStoreUser> userManager, IAlbumService albumService, IArtistService artistService)
         {
             _userManager = userManager;
+            _albumService = albumService;
+            _artistService = artistService;
         }
 
         [HttpPost("[action]")]
@@ -44,6 +52,20 @@ namespace MusicStore.Web.Controllers.Api
                 }
             }
             return status;
+        }
+
+        [HttpGet("albums")]
+        public async Task<IActionResult> ExportAllAlbums()
+        {
+            var albums = _albumService.GetAllAlbums();
+            return Ok(albums);
+        }
+
+        [HttpGet("artists")]
+        public async Task<IActionResult> ExportAllArtists()
+        {
+            var artists = _artistService.GetAllArtists();
+            return Ok(artists);
         }
     }
 }

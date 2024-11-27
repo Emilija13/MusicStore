@@ -7,6 +7,7 @@ using MusicStore.Repository.Interface;
 using MusicStore.Service.Interface;
 using MusicStore.Service.Implementation;
 using MusicStore.Domain;
+using NuGet.Protocol.Core.Types;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,9 @@ builder.Services.AddTransient<ITrackService, TrackService>();
 builder.Services.AddTransient<IUserPlaylistService, UserPlaylistService>();
 builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 var app = builder.Build();
 

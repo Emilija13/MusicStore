@@ -71,6 +71,8 @@ namespace MusicStore.Web.Controllers
 
             ViewBag.LoggedIn = userId != null;
 
+            StripeConfiguration.ApiKey = "sk_test_51PIzfd00EAd9031vQJH04ZBwqbo3Gqe1jI9pTcdM0ZGcbwlWBdNg1L6ndbipIUj4hI1dVjEhO82Olqj7wdwjAesQ00F14SZdh2";
+
 
             var order = this._shoppingCartService.getShoppingCartInfo(userId);
 
